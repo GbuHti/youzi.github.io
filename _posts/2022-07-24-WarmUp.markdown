@@ -1,0 +1,77 @@
+# networking warmup
+
+## 字节流(byte stream)
+
+##  Sponge UTILs
+### address
+address封装了sockaddr_storage, 下面分别介绍sockaddr_storage、sockaddr、sockaddr_in,
+这几个在网络编程中特别重要的数据结构：
+2. sockaddr_in: IPV4, 16个字节，结构体如下：
+   ```c
+   struct sockaddr_in {
+     sa_family_t sin_family;             /* AF_INET */
+     in_port_t sin_port;                 /* Port number.  */
+     struct in_addr sin_addr;            /* Internet address.  */
+
+     /* Pad to size of `struct sockaddr'.  */
+     unsigned char sin_zero[sizeof (struct sockaddr) -
+                            sizeof (sa_family_t) -
+                            sizeof (in_port_t) -
+                            sizeof (struct in_addr)];
+    };
+    typedef uint32_t in_addr_t;
+    struct in_addr  {
+    in_addr_t s_addr;                    /* IPv4 address */
+    };
+   ```
+3. sockaddr: 通用结构体1, 16个字节。为何会有通用结构体？原因是网络协议除了IPV4协议，还有IPv6、IPX、
+X.25、AX.25... 在网络编程时，不管使用何种协议，使用的都是同一套socket API。如IPv4是struct sockaddr_in，
+IPv6是struct sockaddr_in6，所以需要将所有这些表示网络地址的结构体抽象成一个通用的结构体，抽象之后的结构体便是struct sockaddr。
+   ```c
+   struct sockaddr { 
+   sa_family_t sa_family;       /* Address family */
+   char sa_data[14];            /* protocol-specific address */
+    };
+   ``` 
+    socket API的种类如下：
+    ```c
+    /*application->kernel*/
+    int bind   (int sockfd, struct sockaddr *my_addr, socklen_t addrlen);
+    
+    int connect(int sockfd, const struct sockaddr *serv_addr,
+    socklen_t addrlen);
+    
+    int sendto (int s, const void *msg, size_t len, int flags,
+    const struct sockaddr *to, socklen_t tolen);
+    
+    /*kernel->application*/
+    int  accept     (int s, struct sockaddr *addr, socklen_t *addrlen);
+    
+    int  recvfrom   (int s,  void  *buf, size_t len, int flags,
+    struct sockaddr *from, socklen_t *fromlen);
+    
+    int  getpeername(int s, struct sockaddr *name, socklen_t *namelen);
+    int  getsockname(int s, struct sockaddr *name, socklen_t *namelen);
+    ```
+4. sockaddr_storage: 通用结构体2，128个字节。因为具体的网络协议结构体大小不一致，比如IPv6结构
+体大小是28，所以需要可以表示所有网络协议结构体的通用结构体2。
+    ```c
+   /* Structure large enough to hold any socket address
+    (with the historical exception of AF_UNIX). 128 bytes reserved.  */
+    
+    #if ULONG_MAX > 0xffffffff
+    # define __ss_aligntype __uint64_t
+    #else
+    # define __ss_aligntype __uint32_t
+    #endif
+    #define _SS_SIZE        128
+    #define _SS_PADSIZE     (_SS_SIZE - (2 * sizeof (__ss_aligntype)))
+    
+    struct sockaddr_storage
+    {
+    sa_family_t ss_family;      /* Address family */
+    __ss_aligntype __ss_align;  /* Force desired alignment.  */
+    char __ss_padding[_SS_PADSIZE];
+    };
+   ```
+
