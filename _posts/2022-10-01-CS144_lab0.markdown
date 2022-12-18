@@ -4,9 +4,28 @@ title:  "CS144_lab0"
 date:   2022-10-01 14:53:11 +0800
 categories: jekyll update
 ---
+## 1 测试套件
+test harness中文释义：
+在软件测试中，test harness或自动化测试框架是一个包含了软件和测试数据（这些数据已经过配置）的集合，用以测试一个程序单元，使之在不同的条件下运行，
+并监控它的行为和输出。Test harness有两个主要的组成部分：测试执行引擎和测试脚本储存库（repository）。
+因此，Test harness能够使我们实现自动化地测试。简单的说，你可以把test harness当作是你构建测试时所使用脚手架。
 
-# 1 测试框架
+一个test harness应包括具体的测试运行（有利于优化），设计运行时环境，以及提供结果分析的能力。
 
+### 测试条件
 待测对象：ByteStream
+![img.png](pic/harness_uml_class.png)
 
-
+### 细节
+代码片段展示
+```c++
+1 ByteStreamTestHarness test{"overwrite-clear-overwrite", 2};
+2 
+3 test.execute(Write{"cat"}.with_bytes_written(2));
+4 test.execute(Pop{2});
+5 test.execute(Write{"tac"}.with_bytes_written(2));
+```
+1. 构造一个测试套件ByteStreamTestHarness，里面包含容量为2的ByteStream对象作为测试对象，之后作为执行引擎的入参。
+2. 构造一个ByteStream的派生类对象作为入参，在测试套件中调用派生类的execute()方法，即执行引擎，执行引擎里面执行测试对象的方法，将结果
+与派生类对象的存储值进行比较。
+3. 总体过程大致是就是上图上半部分的环状结构。
