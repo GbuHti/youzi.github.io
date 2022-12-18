@@ -14,7 +14,7 @@ test harness中文释义：
 
 ### 测试条件
 待测对象：ByteStream
-![img.png](pic/harness_uml_class.png)
+![img.png](https://github.com/GbuHti/gbuhti.github.io/blob/gh-pages/_posts/pic/harness_uml_class.png)
 
 ### 细节
 代码片段展示
@@ -28,4 +28,4 @@ test harness中文释义：
 1. 构造一个测试套件ByteStreamTestHarness，里面包含容量为2的ByteStream对象作为测试对象，之后作为执行引擎的入参。
 2. 构造一个ByteStream的派生类对象作为入参，在测试套件中调用派生类的execute()方法，即执行引擎，执行引擎里面执行测试对象的方法，将结果
 与派生类对象的存储值进行比较。
-3. 总体过程大致是就是上图上半部分的环状结构。
+3. 总体过程大致是测试套件根据派生类的类型来决定对测试对象的具体操作，就是上图上半部分的环状结构所展示出来的那样。
