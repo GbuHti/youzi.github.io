@@ -18,7 +18,7 @@ categories: jekyll update
 
 其中的变量满足约束条件： firstUnacceptable - firstUnread == capcacity
 
-<img alt="img.png" src="pic/re-assemble_memory_state.png"/>
+![img.png](pic/re-assemble_memory_state.png)
 
 在实际实现的时候，这几个变量需要由re-assembler来维护。
 
@@ -56,7 +56,7 @@ graph LR
 这是leetcode上的一道题，要求在一系列区间(用二元组表示)中，插入新的区间。这个题目的场景与现在要解决的问题场景非常契合。下图显示了这道题的解题思路。剩下要解决的是，stream-reassembler的存储
 空间里存储的是实际的内容，而非简洁的二元组，需要考虑接下来是用二元组数组来间接管理存储区间，还是直接操作操作二元组(类似贪吃蛇，遇到一个吃一下，不断增长自身长度）。
 
-<img src="./pic/lab1_design.png" width="400"/>
+![](./pic/lab1_design.png)
 
 3. 按照已经给出的初始化方式
     ```c++
