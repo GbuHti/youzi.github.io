@@ -10,3 +10,13 @@ categories: jekyll update
 ## 什么是cmake
 
 ## 基本命令
+
+## PRIVATE INTERFACE PUBLIC 区别
+在使用target_include_directories()命令为库添加头文件时需要指定PRIVATE
+INTERFACE、PUBLIC参数，用以确定头文件的传递范围。
+PRIVATE: 头文件中的定义只在源文件的实现中被使用到。头文件的影响力到
+本级为止。上级不再感知到头文件。
+INTERFACE: 头文件的定义只在本级头文件中的定义中被使用到。头文件的影响力借由
+本级头文件继续向上传递。
+PUBLIC: 头文件的定义既在源文件的实现中被使用到，又在本级头文件中被使用到。
+头文件的影响力继续向上传递。
