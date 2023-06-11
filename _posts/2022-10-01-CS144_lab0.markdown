@@ -14,7 +14,7 @@ test harness中文释义：
 
 ### 测试条件
 待测对象：ByteStream
-<img src="./_posts/pic/test-harness.png"/>
+<img src="pic/test-harness.png"/>
 
 ### 细节
 代码片段展示
