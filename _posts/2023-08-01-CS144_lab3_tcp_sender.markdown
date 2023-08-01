@@ -35,10 +35,6 @@ ackno表明receiver想要接收的下一个字节的序号。
 SYN收到之后，就代表传输正式开始了。
 所以说ackno available.
 
-### 如何理解ISN与SYN
-ISN是一个序列号；SYN是一个标志位
-
-
 ### 实验出错点
 - TCPReceiver中的fin标志位应该根据ByteStream的实际情况来，而非根据报文来确定。
 - segment_receiver()函数中应该穿入stream index. 要注意在一个报文中SYN 与 payload同时
