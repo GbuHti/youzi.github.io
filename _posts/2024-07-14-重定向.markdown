@@ -9,42 +9,47 @@ categories: jekyll update
 初次接触重定向操作符，重定向操作符的多种写法让人疑惑，记忆起来十分痛苦。
 这里主要试图通过绘制的原理图来对重定向操作符的多种写法进行解释，达到掌握
 重定向操作符使用方法的目的。
-- 语法
-    ```shell
-    # 重定向输出
-    M>&N
-    M>filename
+## 语法
+```shell
+# 重定向输出
+M>&N
+M>filename
 
-    # 重定向输入
-    M<&N
-    M<filename
+# 重定向输入
+M<&N
+M<filename
 
-    # 为了读写filename，把filename打开，并将文件描述符j分配给它
-    [j]<>filename
-    ```
-- 原理图
+# 为了读写filename，把filename打开，并将文件描述符j分配给它
+[j]<>filename
+```
 
-    ![img_2.png](pic/文件描述符的作用.png)
-    上图显示重定向的两个要素，文件描述符和文件，它们通过重定向操作符绑定起来
+## 原理图
+![img_2.png](pic/文件描述符的作用.png)
+上图显示重定向的两个要素，文件描述符和文件，它们通过重定向操作符绑定起来
 
-    操作符```<```是输入重定向，是把操作符右边的文件和操作符左边
+操作符```<```是输入重定向，是把操作符右边的文件和操作符左边
 的描述符进行绑定，所以在使用```<```时，右边需要指定一个```filename```，
 文件描述符fd可以看做是文件的指针，通过使用```&```运算符，组合成
 的```&fd```也可以起到指定filename的作用。
 
-    Shell中的命令一般从标准输入0获取输入，通过标准输出1和标准错误输出
+Shell中的命令一般从标准输入0获取输入，通过标准输出1和标准错误输出
 2把结果输出。所以如果```<```的左边不写fd，就是把```fd0```和```filename```
 绑定起来。
 
-    操作符```>```是输出重定向，同样按照上面的方式来理解。
-- 使用```exec```命令可以将```fd```与```filename```的绑定关系持久化，
-    ```shell
-    # logfile 可读可写
-    exec 3<> logfile
-    # 向logfile写入
-    echo "This statement is sent to logfile by fd3" 1>&3
-    # 从logfile读取
-    read statement 0<&3
-    # 关闭fd3
-    exec 3>&-
-    ```
+操作符```>```是输出重定向，同样按照上面的方式来理解。
+
+## 持久化
+使用```exec```命令可以将```fd```与```filename```的绑定关系持久化，
+```shell
+# logfile 可读可写
+exec 3<> logfile
+# 向logfile写入
+echo "This statement is sent to logfile by fd3" 1>&3
+# 从logfile读取
+read statement 0<&3
+# 关闭fd3
+exec 3>&-
+```
+
+# 参考
+[linux exec与重定向](http://xstarcd.github.io/wiki/shell/exec_redirect.html)
